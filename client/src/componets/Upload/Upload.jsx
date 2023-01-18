@@ -1,30 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Upload.css';
 function Upload() {
+
+  const [subject, setSubject] = useState('');
+  const [details, setDetails] = useState('');
+  async function Upload() {
+    console.log('here');
+
+    const responce = await fetch('http://localhost:3001/uploadBlog', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        subject,
+        details,
+
+      }),
+    })
+
+    const data = await responce.json()
+    console.log(data);
+
+    // if (data.status === 'error') {
+    //   setDataErr(data)
+    // } else {
+    //   navigate('/');
+
+    // }
+
+  }
   return (
     <div className="mainupload">
-      <div class="container">
+      <div className="container">
         <h2>Post</h2>
 
-        <form>
+        <form
+          onSubmit={Upload}
+        >
           <label>Subjet</label>
-          <div class="group">
-            <input type="text" />
-            <span class="highlight"></span>
-            <span class="bar"></span>
+          <div className="group">
+            <input type="text" value={subject} onChange={(e) => { setSubject(e.target.value) }} />
+            <span className="highlight"></span>
+            <span className="bar"></span>
           </div>
           <label>Description</label>
-          <div class="group">
-            <textarea type="text"></textarea>
-            <span class="highlight"></span>
-            <span class="bar"></span>
+          <div className="group">
+            <textarea type="text" value={details} onChange={(e) => { setDetails(e.target.value) }}></textarea>
+            <span className="highlight"></span>
+            <span className="bar"></span>
           </div>
           <div>
-            <input type="submit" value="Submit" />
+            <button type="submit">Upload</button>
           </div>
         </form>
 
-        <p class="footer"></p>
+        <p className="footer"></p>
       </div>
     </div>
   );
